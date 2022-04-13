@@ -1,3 +1,11 @@
+config:
+  # Config parameters described in application metadata
+  # Their values will be injected here by the Great Bear deployer
+  #
+  ACCESS_PORT: |
+    "31001"
+
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -384,7 +392,7 @@ initContainers: []
 service:
   ## @param service.type Odoo service type
   ##
-  type: LoadBalancer
+  type: NodePort
   ## @param service.ports.http Odoo service HTTP port
   ##
   ports:
@@ -392,8 +400,8 @@ service:
   ## @param service.nodePorts.http NodePort for the Odoo HTTP endpoint
   ## NOTE: choose port between <30000-32767>
   ##
-  nodePorts:
-    http: ""
+  nodePorts: 
+    http: "{{ default 31001 (int .Values.config.ACCESS_PORT)}}"
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
   ## ref: https://kubernetes.io/docs/user-guide/services/

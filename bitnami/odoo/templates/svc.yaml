@@ -37,7 +37,7 @@ spec:
       protocol: TCP
       targetPort: http
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty (coalesce .Values.service.nodePorts.http .Values.service.nodePort))) }}
-      nodePort: {{ coalesce .Values.service.nodePorts.http .Values.service.nodePort }}
+      nodePort: {{ tpl  .Values.service.nodePorts.http $}}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

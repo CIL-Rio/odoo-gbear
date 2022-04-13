@@ -1,5 +1,3 @@
-annotations:
-  category: CRM
 apiVersion: v2
 appVersion: 15.0.20220410
 dependencies:
@@ -12,7 +10,7 @@ dependencies:
     version: 1.x.x
 description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
 engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/odoo
+home: https://github.com/CIL-Rio/odoo-gbear
 icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
 keywords:
   - odoo
@@ -21,10 +19,40 @@ keywords:
   - http
   - web
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - email: lschwadb@cisco.com
+    name: Leandro
 name: odoo
 sources:
   - https://github.com/bitnami/bitnami-docker-odoo
   - https://www.odoo.com/
 version: 21.2.7
+annotations:
+  category: CRM
+  
+  # Display title of the application
+  # Assumed type: string
+  gbear.io/title: "Odoo"
+
+  # Application tags set, array
+  # Assumed type: array of strings
+  gbear.io/tags: |
+    - debug
+    - sample
+  # Labels can contain additional application properties
+  # Particular label names are not defined, given only for example
+  # Assumed type: object
+  gbear.io/labels: |
+      # kind: EXAMPLE
+      # visibility: "hidden"
+   
+  # Defines whether the app can be deployed to the same site several times 
+  # Assumed type: bool as string
+  gbear.io/singleton: "true"
+
+  # Array of application configuration options
+  # See openapi.yam/components/schemas/ApplicationParameter
+  # Assumed type: array of objects
+  gbear.io/configuration: |
+    - name: ACCESS_PORT
+      title: Access HTTP port (30000-32767)
+      value: 31001 
