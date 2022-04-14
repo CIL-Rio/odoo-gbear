@@ -151,7 +151,7 @@ spec:
                   key: {{ include "odoo.databaseSecretPasswordKey" . }}
             {{- end }}
             - name: ODOO_EMAIL
-              value: {{ .Values.odooEmail | quote }}
+              value: {{(tpl .Values.odooEmail $) | quote }}
             - name: ODOO_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -160,7 +160,7 @@ spec:
             - name: ODOO_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.odooSkipInstall | quote }}
             - name: ODOO_LOAD_DEMO_DATA
-              value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
+              value: {{ ternary "yes" "no" ( eq (tpl .Values.loadDemoData $) "true") | quote }}
             {{- if .Values.withoutDemo }}
             - name: WITHOUT_DEMO
               value: {{ .Values.withoutDemo | quote }}

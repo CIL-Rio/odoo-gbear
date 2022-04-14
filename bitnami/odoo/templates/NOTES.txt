@@ -42,7 +42,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 2. Obtain the login credentials
 
-  export ODOO_EMAIL={{ .Values.odooEmail }}
+  export ODOO_EMAIL={{ tpl .Values.odooEmail $ }}
   {{ include "common.utils.secret.getvalue" (dict "secret" (include "odoo.secretName" .) "field" "odoo-password" "context" $) }}
 
   echo Email   : $ODOO_EMAIL

@@ -4,6 +4,12 @@ config:
   #
   ACCESS_PORT: |
     "31001"
+  USER_NAME: |
+    "user@example.com"
+  USER_PASSWORD: |
+    "password"
+  DEMO_DATA: |
+    false
 
 
 ## @section Global parameters
@@ -102,19 +108,19 @@ image:
 ## @param odooEmail Odoo user email
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooEmail: user@example.com
+odooEmail: '{{ default "user@example.com" (.Values.config.USER_NAME)}}'
 ## @param odooPassword Odoo user password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooPassword: ""
+odooPassword: '{{ default "" (.Values.config.USER_PASSWORD)}}'
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
 ## @param loadDemoData Whether to load demo data for all modules during initialization
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-loadDemoData: false
+loadDemoData: "{{default false ( .Values.config.DEMO_DATA) }}"
 ## @param customPostInitScripts Custom post-init.d user scripts
 ## ref: https://github.com/bitnami/bitnami-docker-odoo/tree/master/14.0/debian-10/rootfs/post-init.d
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`

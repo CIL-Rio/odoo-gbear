@@ -25,7 +25,7 @@ name: odoo
 sources:
   - https://github.com/bitnami/bitnami-docker-odoo
   - https://www.odoo.com/
-version: 21.2.7
+version: 0.0.2
 annotations:
   category: CRM
   
@@ -56,3 +56,14 @@ annotations:
     - name: ACCESS_PORT
       title: Access HTTP port (30000-32767)
       value: 31001 
+    - name: USER_NAME
+      title: Odoo User
+      value: user@example.com 
+    - name: USER_PASSWORD
+      title: Odoo User Password
+      value: password
+    - name: DEMO_DATA
+      title: Demo
+      choices:
+      - "false"
+      - "true"
