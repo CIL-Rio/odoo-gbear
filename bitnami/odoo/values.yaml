@@ -4,7 +4,7 @@ config:
   #
   ACCESS_PORT: |
     "31001"
-  USER_NAME: |
+  USER_NAME : |
     "user@example.com"
   USER_PASSWORD: |
     "password"
@@ -113,7 +113,7 @@ odooEmail: '{{ default "user@example.com" (.Values.config.USER_NAME)}}'
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
 ##
-odooPassword: '{{ default "" (.Values.config.USER_PASSWORD)}}'
+odooPassword: '{{ default "" (.Values.config.USER_PASSWORD)}}' #
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false

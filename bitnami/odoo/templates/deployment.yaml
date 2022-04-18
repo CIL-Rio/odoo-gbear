@@ -151,7 +151,7 @@ spec:
                   key: {{ include "odoo.databaseSecretPasswordKey" . }}
             {{- end }}
             - name: ODOO_EMAIL
-              value: {{(tpl .Values.odooEmail $) | quote }}
+              value: {{.Values.config.USER_NAME | quote }}
             - name: ODOO_PASSWORD
               valueFrom:
                 secretKeyRef:
