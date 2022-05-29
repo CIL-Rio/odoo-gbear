@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ include "app.fullname" . }}-app"
+  labels: {{- include "app.labels.odoo" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "app.selector.odoo" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "app.selector.odoo" . | nindent 8 }}
+    spec:
+      securityContext:
+        runAsUser: 0
+      volumes:
+        - name: odoo-data
+          persistentVolumeClaim:
+            claimName: "{{ include "app.fullname" . }}-app-pvc"
+      containers:
+        - name: "{{ .Chart.Name }}-odoo"
+          image: "{{ .Values.image.odoo.repository }}:{{ .Values.image.odoo.tag }}"
+          imagePullPolicy: IfNotPresent
+        {{- with .Values.ports }}
+          ports:
+          {{- range $key, $value := . }}
+            - name: {{ $key }}
+              containerPort: {{ $value.port }}
+              protocol: {{ default "TCP" $value.protocol }}
+          {{- end }}
+        {{- end }}
+          env:
+            - name: DB_PORT_5432_TCP_ADDR
+              value: "{{ include "app.fullname" . }}-db-svc"
+            - name: DB_PORT_5432_TCP_PORT
+              value: '5432'
+            - name: DB_ENV_POSTGRES_USER
+              value: odoo
+            - name: DB_ENV_POSTGRES_PASSWORD
+              value: odoo
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+          volumeMounts:
+            - name: odoo-data
+              mountPath: /var/lib/odoo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ include "app.fullname" . }}-app-pvc"
+  labels: {{- include "app.labels.odoo" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  name: "{{ include "app.fullname" . }}-app-svc"
+spec:
+  selector:    
+    app.kubernetes.io/name: "app-{{ .Chart.Name }}"
+  type: NodePort
+  ports:  
+  - name: http
+    port: 8069
+    targetPort: 8069
+    nodePort: {{tpl .Values.ports.http.nodePort $}}
+    protocol: TCP

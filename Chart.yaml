@@ -1,0 +1,39 @@
+# bear-echo/charts/Chart.yaml
+
+apiVersion: v2
+appVersion: "1.0.0"
+description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
+name: odoo 
+sources:
+  - https://github.com/CIL-Rio/odoo
+  - https://www.odoo.com/
+version: 1.0.0
+icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
+maintainers:
+  - email: lschwadb@cisco.com
+    name: Leandro Schwab
+annotations:
+  # Display title of the application
+  # Assumed type: string
+  gbear.io/title: "Odoo"
+  # Application tags set, array
+  # Assumed type: array of strings
+  gbear.io/tags: |
+    - POS
+    - sample
+  # Labels can contain additional application properties
+  # Particular label names are not defined, given only for example
+  # Assumed type: object
+  gbear.io/labels: |
+      # kind: EXAMPLE
+      # visibility: "hidden"
+  # Defines whether the app can be deployed to the same site several times 
+  # Assumed type: bool as string
+  gbear.io/singleton: "true"
+  # Array of application configuration options
+  # See openapi.yam/components/schemas/ApplicationParameter
+  # Assumed type: array of objects
+  gbear.io/configuration: |
+    - name: ACCESS_PORT
+      title: Access HTTP port (30000-32767)
+      value: 31001

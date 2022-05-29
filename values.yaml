@@ -1,0 +1,47 @@
+# bear-echo/charts/values.yaml
+config:
+  # Config parameters described in application metadata
+  # Their values will be injected here by the Great Bear deployer
+  #
+  ACCESS_PORT: |
+    "31001"
+
+replicaCount: 1
+strategyType: Recreate
+
+image:
+  odoo:
+    registry: docker.io
+    repository: leandroschwab/odoo
+    tag: 2
+  postgresql:
+    registry: docker.io
+    repository: postgres
+    tag: 13
+
+service:
+  type: NodePort
+  port: 8069
+
+ports:
+  http:
+    port: 8069
+    protocol: TCP
+    nodePort: "{{ default 31001 (int .Values.config.ACCESS_PORT)}}"
+
+# ----
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+nodeSelector: {}
+
+affinity: {}
+
+ingress:
+    enabled: false
+    istioGateway: ""
+    servicePath: ""
+
+siteId: ""

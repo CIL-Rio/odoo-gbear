@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "{{ include "app.fullname" . }}-db"
+  labels: {{- include "app.labels.db" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "app.selector.db" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "app.selector.db" . | nindent 8 }}
+    spec:
+      volumes:
+        - name: odoo-db
+          persistentVolumeClaim:
+            claimName: "{{ include "app.fullname" . }}-db-pvc"
+      containers:
+        - name: "odoo-postgresql"
+          image: "{{ .Values.image.postgresql.repository }}:{{ .Values.image.postgresql.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: postgres  
+            - name: POSTGRES_USER
+              value: odoo
+            - name: POSTGRES_PASSWORD
+              value: odoo
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: odoo-db
+              mountPath: /var/lib/postgresql/data
+  serviceName: odoo-postgresql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ include "app.fullname" . }}-db-svc"
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app.kubernetes.io/name: "db-{{ .Chart.Name }}"
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ include "app.fullname" . }}-db-pvc"
+  labels: {{- include "app.labels.db" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+  storageClassName: local-path
